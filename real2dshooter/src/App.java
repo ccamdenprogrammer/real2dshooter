@@ -1,4 +1,12 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Random;
+
+
 public class App {
+    
 
     // Main variables
     int targetDistance = 100; // initial distance in meters
