@@ -15,15 +15,20 @@ public class App {
     double gravity = 9.81; // m/s^2
     
     // Initialize GUI components
-    void initializeGUI() {
+    static void initializeGUI() {
         JFrame frame = new JFrame();// Create window
+        frame.setLayout(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Real 2D Shooter");
         frame.setResizable(false);
         frame.setSize(800,800);
         frame.setVisible(true);
 
-        JPanel panel = new JPanel();// Add target panel
+        JPanel targetPanel = new JPanel();// Add target panel
+        targetPanel.setBackground(Color.DARK_GRAY);
+        targetPanel.setBounds(275,275,250,250);
+
+        frame.add(targetPanel); //adding panel to frame
         // Add scope crosshair overlay
         // Add distance adjustment buttons
         // Add zoom adjustment buttons
@@ -91,6 +96,6 @@ public class App {
 
     public static void main(String[] args) throws Exception 
     {
-        
+        initializeGUI();
     }
 }
