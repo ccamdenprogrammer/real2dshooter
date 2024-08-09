@@ -16,8 +16,14 @@ public class App {
     
     // Initialize GUI components
     void initializeGUI() {
-        // Create window
-        // Add target panel
+        JFrame frame = new JFrame();// Create window
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Real 2D Shooter");
+        frame.setResizable(false);
+        frame.setSize(800,800);
+        frame.setVisible(true);
+
+        JPanel panel = new JPanel();// Add target panel
         // Add scope crosshair overlay
         // Add distance adjustment buttons
         // Add zoom adjustment buttons
@@ -72,7 +78,7 @@ public class App {
     int calculateImpactY(double bulletDrop) {
         // Convert bulletDrop to pixels or relevant units
         // Return the Y coordinate of the bullet hole
-        return (int)(bulletDrop * someConversionFactor);
+        return 0;
     }
     
     // Helper method to display the bullet hole on the target
@@ -83,7 +89,8 @@ public class App {
     // Main method to start the simulator
 
 
-    public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+    public static void main(String[] args) throws Exception 
+    {
+        
     }
 }
