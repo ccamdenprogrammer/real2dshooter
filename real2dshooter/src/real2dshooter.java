@@ -41,6 +41,7 @@ public class real2dshooter extends JPanel
     {
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
+        //changeTargetDistance()
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
     }
 
@@ -53,6 +54,15 @@ public class real2dshooter extends JPanel
 
     public void changeTargetDistance()
     {
-        //add button that changes target distance 100 meters per click.
+        //add user input box that changes target distance 100 meters per click.
+        int targetDistance; //target distance variable initialization
+        //init text field box
+        //set position and size
+        //add box label
+        //add box button
+
+        //distance = user input from box
+        //target width = distance/10 (arbitrary conversion factor... will do real math later)
+        //target height = distance/10 (also arbitrary)
     }
 }
