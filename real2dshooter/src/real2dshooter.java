@@ -3,6 +3,8 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class real2dshooter extends JPanel 
 {
@@ -19,6 +21,8 @@ public class real2dshooter extends JPanel
     int targetY = 300;
     int targetWidth = 10;
     int targetHeight = 10;
+
+    
 
     real2dshooter()
     {
@@ -52,16 +56,17 @@ public class real2dshooter extends JPanel
         targetY = (HEIGHT/2)-(targetHeight/2);
     }
 
+
+    //instance of text box frame "TBF"
+    textBoxFrame TBF = new textBoxFrame();
+
+
     public void changeTargetDistance()
     {
         //add user input box that changes target distance 100 meters per click.
         int targetDistance; //target distance variable initialization
-        //init text field box
-        //set position and size
-        //add box label
-        //add box button
-
         //distance = user input from box
+       
         //target width = distance/10 (arbitrary conversion factor... will do real math later)
         //target height = distance/10 (also arbitrary)
     }
