@@ -74,6 +74,14 @@ public class real2dshooter extends JPanel implements KeyListener
         //increase distance by 100m each click
         //target width = distance/10 (arbitrary conversion factor... will do real math later)
         //target height = distance/10 (also arbitrary)
+        // Increase or decrease target size based on distance
+        // Example: Reduce size as distance increases
+        targetWidth = 200 - (targetDistance / 10); // Arbitrary conversion factor
+        targetHeight = 200 - (targetDistance / 10);
+
+        // Ensure the target doesn't get too small or too large
+        if (targetWidth < 20) targetWidth = 20;
+        if (targetHeight < 20) targetHeight = 20;
     }
 
     @Override
@@ -83,15 +91,19 @@ public class real2dshooter extends JPanel implements KeyListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == 61)
+        if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) // '+' key
         {
-            targetDistance = targetDistance + 100;
+            targetDistance += 100;
+            changeTargetDistance(); // Update target size
+            repaint(); // Redraw with new size
         }
-        if(e.getKeyCode() == 45)
+        if (e.getKeyCode() == KeyEvent.VK_MINUS) // '-' key
         {
-            targetDistance = targetDistance - 100;
+            targetDistance -= 100;
+            changeTargetDistance(); // Update target size
+            repaint(); // Redraw with new size
         }
-        
+
         System.out.println(targetDistance);
     }
 
