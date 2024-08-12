@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class real2dshooter extends JPanel 
+public class real2dshooter extends JPanel
 {
     //image initialization
     Image backgroundImage;
@@ -19,11 +19,10 @@ public class real2dshooter extends JPanel
     //target variable initialization
     int targetX = 300;
     int targetY = 300;
-    int targetWidth = 10;
-    int targetHeight = 10;
+    int targetWidth = 100;
+    int targetHeight = 100;
 
     
-
     real2dshooter()
     {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -45,7 +44,7 @@ public class real2dshooter extends JPanel
     {
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
-        //changeTargetDistance()
+        //changeTargetDistance();
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
     }
 
@@ -57,17 +56,17 @@ public class real2dshooter extends JPanel
     }
 
 
-    //instance of text box frame "TBF"
-    textBoxFrame TBF = new textBoxFrame();
-
-
+    int targetDistance = 0;
+    button buttonincrease = new button();
     public void changeTargetDistance()
     {
-        //add user input box that changes target distance 100 meters per click.
-        int targetDistance; //target distance variable initialization
-        //distance = user input from box
-       
+        
+        //increase distance by 100m each click
+        buttonincrease.distance = targetDistance;
         //target width = distance/10 (arbitrary conversion factor... will do real math later)
+       
         //target height = distance/10 (also arbitrary)
     }
+
+    
 }
