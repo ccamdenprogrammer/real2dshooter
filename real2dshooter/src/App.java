@@ -24,13 +24,10 @@ public class App {
 
         real2dshooter R2DS = new real2dshooter();
         
+        
         frame.add(R2DS);
+        R2DS.addKeyListener(R2DS);  
         frame.pack();
         frame.setVisible(true);
-
-
-
-        
-
     }
 }

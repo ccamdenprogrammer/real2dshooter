@@ -3,10 +3,8 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
-public class real2dshooter extends JPanel
+public class real2dshooter extends JPanel implements KeyListener
 {
     //image initialization
     Image backgroundImage;
@@ -21,17 +19,30 @@ public class real2dshooter extends JPanel
     int targetY = 300;
     int targetWidth = 100;
     int targetHeight = 100;
+    int targetDistance = 0;
 
+    
     
     real2dshooter()
     {
+        //adding key listener
+        this.addKeyListener(this);
+        
+        // Make the panel focusable and request focus
+        setFocusable(true);
+        requestFocusInWindow();
+        
+        //set pref size
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-        //Load images
 
+
+        //Load images
         targetImage = new ImageIcon(getClass().getResource("./resources/targetIMG.png")).getImage();
         bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         backgroundImage = new ImageIcon(getClass().getResource("./resources/backgroundIMG.jpg")).getImage();
+        
+        
     }
 
     public void paintComponent(Graphics g)
@@ -44,7 +55,6 @@ public class real2dshooter extends JPanel
     {
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
-        //changeTargetDistance();
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
     }
 
@@ -56,16 +66,39 @@ public class real2dshooter extends JPanel
     }
 
 
-    int targetDistance = 0;
-    button buttonincrease = new button();
+    
+    
     public void changeTargetDistance()
     {
         
         //increase distance by 100m each click
-        buttonincrease.distance = targetDistance;
         //target width = distance/10 (arbitrary conversion factor... will do real math later)
-       
         //target height = distance/10 (also arbitrary)
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == 61)
+        {
+            targetDistance = targetDistance + 100;
+        }
+        if(e.getKeyCode() == 45)
+        {
+            targetDistance = targetDistance - 100;
+        }
+        
+        System.out.println(targetDistance);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+        
     }
 
     
