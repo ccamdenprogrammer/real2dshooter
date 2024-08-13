@@ -21,7 +21,12 @@ public class real2dshooter extends JPanel implements KeyListener
     int targetHeight = 100;
     int targetDistance = 0;
 
-    
+    // bullet hole flag and coordinates
+    boolean drawBulletHole = false;
+    int bulletHoleX;
+    int bulletHoleY;
+    int bulletHoleWidth;
+    int bulletHoleHeight;
     
     real2dshooter()
     {
@@ -41,7 +46,7 @@ public class real2dshooter extends JPanel implements KeyListener
         targetImage = new ImageIcon(getClass().getResource("./resources/targetIMG.png")).getImage();
         bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         backgroundImage = new ImageIcon(getClass().getResource("./resources/backgroundIMG.jpg")).getImage();
-        
+        bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         
     }
 
@@ -56,7 +61,12 @@ public class real2dshooter extends JPanel implements KeyListener
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
+        if (drawBulletHole) {
+            g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight,null);
+        }
+        
     }
+
 
     public void targetReCenter()
     {
@@ -104,7 +114,18 @@ public class real2dshooter extends JPanel implements KeyListener
             repaint(); // Redraw with new size
         }
 
-        System.out.println(targetDistance);
+        if (e.getKeyCode() == KeyEvent.VK_SPACE)
+        {
+            //paint bullethole on target (dont worry about drop for now, just paint at center)
+            bulletHoleWidth = targetWidth / 10;
+            bulletHoleHeight = targetHeight / 10;
+            bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
+            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);;
+            drawBulletHole = true;
+            repaint();
+
+        }
+
     }
 
     @Override
