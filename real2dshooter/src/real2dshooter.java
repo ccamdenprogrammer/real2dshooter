@@ -27,7 +27,13 @@ public class real2dshooter extends JPanel implements KeyListener
     int bulletHoleY;
     int bulletHoleWidth;
     int bulletHoleHeight;
-    
+
+    //bullet physical parameters (winchester 308)
+    int muzzleVelocity = 884; //m/s
+    int weight_grains = 150;
+    double gravity = 9.81;
+    double drop_cm = 0; //placeholder value
+
     real2dshooter()
     {
         //adding key listener
@@ -122,6 +128,7 @@ public class real2dshooter extends JPanel implements KeyListener
             bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
             bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);;
             drawBulletHole = true;
+            calculateBulletDrop();
             repaint();
 
         }
@@ -132,6 +139,16 @@ public class real2dshooter extends JPanel implements KeyListener
     public void keyReleased(KeyEvent e) {
 
         
+    }
+
+
+    public void calculateBulletDrop()
+    {
+        //calculates the bullet drop in order to properly paint the bullet hole.
+        drop_cm = 490.5 * (targetDistance*targetDistance)/(muzzleVelocity*muzzleVelocity);
+        System.out.println(drop_cm);    //i really dont know how accurate this equation is... Chat GPT gave it to me lol. I'll make sure later on but for now its a placeholder formula.
+
+
     }
 
     
