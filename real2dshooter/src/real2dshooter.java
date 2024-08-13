@@ -123,12 +123,14 @@ public class real2dshooter extends JPanel implements KeyListener
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
             //paint bullethole on target (dont worry about drop for now, just paint at center)
+            calculateBulletDrop();
             bulletHoleWidth = targetWidth / 10;
             bulletHoleHeight = targetHeight / 10;
             bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
-            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);;
+            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);
+            bulletHoleY = bulletHoleY - (int)drop_cm; //change this. it has an issue somewhere but that will be fixed tonight 8/13/2024
             drawBulletHole = true;
-            calculateBulletDrop();
+            
             repaint();
 
         }
