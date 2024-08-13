@@ -21,8 +21,19 @@ public class real2dshooter extends JPanel implements KeyListener
     int targetHeight = 100;
     int targetDistance = 0;
 
-    
-    
+    // bullet hole flag and coordinates
+    boolean drawBulletHole = false;
+    int bulletHoleX;
+    int bulletHoleY;
+    int bulletHoleWidth;
+    int bulletHoleHeight;
+
+    //bullet physical parameters (winchester 308)
+    int muzzleVelocity = 884; //m/s
+    int weight_grains = 150;
+    double gravity = 9.81;
+    double drop_cm = 0; //placeholder value
+
     real2dshooter()
     {
         //adding key listener
@@ -41,7 +52,7 @@ public class real2dshooter extends JPanel implements KeyListener
         targetImage = new ImageIcon(getClass().getResource("./resources/targetIMG.png")).getImage();
         bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         backgroundImage = new ImageIcon(getClass().getResource("./resources/backgroundIMG.jpg")).getImage();
-        
+        bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         
     }
 
@@ -56,7 +67,12 @@ public class real2dshooter extends JPanel implements KeyListener
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
+        if (drawBulletHole) {
+            g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight,null);
+        }
+        
     }
+
 
     public void targetReCenter()
     {
@@ -104,13 +120,37 @@ public class real2dshooter extends JPanel implements KeyListener
             repaint(); // Redraw with new size
         }
 
-        System.out.println(targetDistance);
+        if (e.getKeyCode() == KeyEvent.VK_SPACE)
+        {
+            //paint bullethole on target (dont worry about drop for now, just paint at center)
+            calculateBulletDrop();
+            bulletHoleWidth = targetWidth / 10;
+            bulletHoleHeight = targetHeight / 10;
+            bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
+            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);
+            bulletHoleY = bulletHoleY - (int)drop_cm; //change this. it has an issue somewhere but that will be fixed tonight 8/13/2024
+            drawBulletHole = true;
+            
+            repaint();
+
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
 
         
+    }
+
+
+    public void calculateBulletDrop()
+    {
+        //calculates the bullet drop in order to properly paint the bullet hole.
+        drop_cm = 490.5 * (targetDistance*targetDistance)/(muzzleVelocity*muzzleVelocity);
+        System.out.println(drop_cm);    //i really dont know how accurate this equation is... Chat GPT gave it to me lol. I'll make sure later on but for now its a placeholder formula.
+
+
     }
 
     
