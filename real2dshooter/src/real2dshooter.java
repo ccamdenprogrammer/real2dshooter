@@ -67,7 +67,8 @@ public class real2dshooter extends JPanel implements KeyListener
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
         targetReCenter(); // recenters target
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
-        if (drawBulletHole) {
+        if (drawBulletHole) 
+        {
             g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight,null);
         }
         
@@ -101,12 +102,14 @@ public class real2dshooter extends JPanel implements KeyListener
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) 
+    {
         
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) 
+    {
         if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) // '+' key
         {
             targetDistance += 100;
@@ -138,7 +141,8 @@ public class real2dshooter extends JPanel implements KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) 
+    {
 
         
     }
@@ -162,10 +166,13 @@ public class real2dshooter extends JPanel implements KeyListener
 
     // Check if the bullet hole's center is within the target bounds
     if (bulletHoleCenterX >= targetX && bulletHoleCenterX <= targetRight &&
-        bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom) {
+        bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom) 
+    {
         return true;
          // Bullet hole is within target bounds
-    } else {
+    } 
+    else 
+    {
         return false; // Bullet hole is outside target bounds
     }
         
@@ -173,12 +180,12 @@ public class real2dshooter extends JPanel implements KeyListener
 
     public void hitMissMessage()
     {
-        isTargetHit();
-        if (isTargetHit() == true)
+        isTargetHit();  //calling the isTargetHit method to determine whether or not the target is hit
+        if (isTargetHit() == true)  //if it is hit, a hit message is displayed to console
         {
             System.out.println("Hit!");
         }
-        else if (isTargetHit() == false)
+        else if (isTargetHit() == false)    //if missed, miss message is displayed to console
         {
             System.out.println("Miss...");
         }
