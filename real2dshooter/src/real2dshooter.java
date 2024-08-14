@@ -128,9 +128,9 @@ public class real2dshooter extends JPanel implements KeyListener
             bulletHoleHeight = targetHeight / 10;
             bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
             bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);
-            bulletHoleY = bulletHoleY - (int)drop_cm; //change this. it has an issue somewhere but that will be fixed tonight 8/13/2024
-            drawBulletHole = true;
             
+            drawBulletHole = true;
+            hitMissMessage();
             repaint();
 
         }
@@ -146,11 +146,42 @@ public class real2dshooter extends JPanel implements KeyListener
 
     public void calculateBulletDrop()
     {
-        //calculates the bullet drop in order to properly paint the bullet hole.
-        drop_cm = 490.5 * (targetDistance*targetDistance)/(muzzleVelocity*muzzleVelocity);
-        System.out.println(drop_cm);    //i really dont know how accurate this equation is... Chat GPT gave it to me lol. I'll make sure later on but for now its a placeholder formula.
+     //scrapped what I had. will write again later.  
+    }
 
 
+    public boolean isTargetHit()
+    {
+       // Calculate the bounds of the target
+    int targetRight = targetX + targetWidth;
+    int targetBottom = targetY + targetHeight;
+
+    // Calculate the center of the bullet hole
+    int bulletHoleCenterX = bulletHoleX + bulletHoleWidth / 2;
+    int bulletHoleCenterY = bulletHoleY + bulletHoleHeight / 2;
+
+    // Check if the bullet hole's center is within the target bounds
+    if (bulletHoleCenterX >= targetX && bulletHoleCenterX <= targetRight &&
+        bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom) {
+        return true;
+         // Bullet hole is within target bounds
+    } else {
+        return false; // Bullet hole is outside target bounds
+    }
+        
+    }
+
+    public void hitMissMessage()
+    {
+        isTargetHit();
+        if (isTargetHit() == true)
+        {
+            System.out.println("Hit!");
+        }
+        else if (isTargetHit() == false)
+        {
+            System.out.println("Miss...");
+        }
     }
 
     
