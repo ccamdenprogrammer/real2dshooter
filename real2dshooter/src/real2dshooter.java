@@ -184,12 +184,23 @@ public class real2dshooter extends JPanel implements KeyListener
         if (isTargetHit() == true)  //if it is hit, a hit message is displayed to console
         {
             System.out.println("Hit!");
+            //displayInfo()
         }
         else if (isTargetHit() == false)    //if missed, miss message is displayed to console
         {
             System.out.println("Miss...");
+            //displayInfo()
         }
     }
+
+    public void displayInfo()
+    {
+        //show target distance
+        //show hit or miss
+        //show bullet drop
+    }
+
+    
 
     
 }
