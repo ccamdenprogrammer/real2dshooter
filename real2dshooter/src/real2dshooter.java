@@ -34,6 +34,10 @@ public class real2dshooter extends JPanel implements KeyListener
     double gravity = 9.81;
     double drop_cm = 0; //placeholder value
 
+    // Message display
+    String hitMissMessage = "";
+    Timer messageTimer;
+
     real2dshooter()
     {
         //adding key listener
@@ -70,6 +74,18 @@ public class real2dshooter extends JPanel implements KeyListener
         if (drawBulletHole) 
         {
             g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight,null);
+        }
+        // Display target distance
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 18));
+        g.drawString("Distance: " + targetDistance + " m", 10, 20);
+
+        // Display hit/miss message in the top-right corner
+        if (!hitMissMessage.isEmpty()) 
+        {
+            FontMetrics metrics = g.getFontMetrics(g.getFont());
+            int messageWidth = metrics.stringWidth(hitMissMessage);
+            g.drawString(hitMissMessage, WIDTH - messageWidth - 10, 20);
         }
         
     }
@@ -191,13 +207,30 @@ public class real2dshooter extends JPanel implements KeyListener
             System.out.println("Miss...");
             //displayInfo()
         }
+        repaint();
+
+        // Display message for 3 seconds
+        if (messageTimer != null) 
+        {
+            messageTimer.stop();
+        }
+        messageTimer = new Timer(3000, new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                hitMissMessage = "";
+                repaint();
+            }
+        });
+        messageTimer.setRepeats(false); // Run once
+        messageTimer.start();
     }
 
     public void displayInfo()
     {
         //show target distance
         //show hit or miss
-        //show bullet drop
     }
 
     
