@@ -19,7 +19,7 @@ public class real2dshooter extends JPanel implements KeyListener
     int targetY = 300;
     int targetWidth = 100;
     int targetHeight = 100;
-    int targetDistance = 0;
+    int targetDistance = 100; //initial target distance in meters
 
     // bullet hole flag and coordinates
     boolean drawBulletHole = false;
