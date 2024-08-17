@@ -19,7 +19,7 @@ public class real2dshooter extends JPanel implements KeyListener
     int targetY = 300;
     int targetWidth = 100;
     int targetHeight = 100;
-    int targetDistance = 0;
+    int targetDistance = 100; //initial target distance in meters
 
     // bullet hole flag and coordinates
     boolean drawBulletHole = false;
@@ -103,18 +103,16 @@ public class real2dshooter extends JPanel implements KeyListener
     
     public void changeTargetDistance()
     {
-        
-        //increase distance by 100m each click
-        //target width = distance/10 (arbitrary conversion factor... will do real math later)
-        //target height = distance/10 (also arbitrary)
-        // Increase or decrease target size based on distance
-        // Example: Reduce size as distance increases
-        targetWidth = 200 - (targetDistance / 10); // Arbitrary conversion factor
-        targetHeight = 200 - (targetDistance / 10);
+        // Example: Assume target size decreases by a factor proportional to distance
+        double scalingFactor = 100.0 / targetDistance; // Adjust scaling factor as needed
+    
+        targetWidth = (int)(100 * scalingFactor); // Adjust the base size (100) as needed
+        targetHeight = (int)(100 * scalingFactor);
 
-        // Ensure the target doesn't get too small or too large
-        if (targetWidth < 20) targetWidth = 20;
-        if (targetHeight < 20) targetHeight = 20;
+        // Ensure the target doesn't get too small
+      
+    
+        targetReCenter(); // Recenter the target after resizing
     }
 
     @Override
@@ -128,15 +126,17 @@ public class real2dshooter extends JPanel implements KeyListener
     {
         if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) // '+' key
         {
-            targetDistance += 100;
+            targetDistance += 100; // Increase distance
             changeTargetDistance(); // Update target size
             repaint(); // Redraw with new size
         }
         if (e.getKeyCode() == KeyEvent.VK_MINUS) // '-' key
         {
-            targetDistance -= 100;
+            if (targetDistance > 100) { // Ensure distance doesn't go below 100 meters
+            targetDistance -= 100; // Decrease distance
             changeTargetDistance(); // Update target size
             repaint(); // Redraw with new size
+        }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
