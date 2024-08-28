@@ -1,25 +1,25 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.*;
 
 public class real2dshooter extends JPanel implements KeyListener
 {
-    //image initialization
+    // image initialization
     Image backgroundImage;
     Image targetImage;
     Image bulletHolImage;
     
-    int WIDTH = 800; //board size init
+    int WIDTH = 800; // board size init
     int HEIGHT = 800;
 
-    //target variable initialization
+    // target variable initialization
     int targetX = 300;
     int targetY = 300;
     int targetWidth = 100;
     int targetHeight = 100;
-    int targetDistance = 100; //initial target distance in meters
+    int targetDistance = 100; // initial target distance, set to 100 meters
+    int initialTargetSize = 50; // Set this to reflect the desired size at 100 meters (in pixels)
+    double realTargetSize = 1.0; // 1m x 1m in real life
 
     // bullet hole flag and coordinates
     boolean drawBulletHole = false;
@@ -28,36 +28,39 @@ public class real2dshooter extends JPanel implements KeyListener
     int bulletHoleWidth;
     int bulletHoleHeight;
 
-    //bullet physical parameters (winchester 308)
-    int muzzleVelocity = 884; //m/s
+    // bullet physical parameters (winchester 308)
+    int muzzleVelocity = 884; // m/s
     int weight_grains = 150;
     double gravity = 9.81;
-    double drop_cm = 0; //placeholder value
+    double drop_cm = 0; // placeholder value
 
-    // Message display
-    String hitMissMessage = "";
-    Timer messageTimer;
+    // hit/miss message variables
+    private String hitMissMessage = "";
+    private Timer messageTimer;
 
     real2dshooter()
     {
-        //adding key listener
+        // adding key listener
         this.addKeyListener(this);
         
         // Make the panel focusable and request focus
         setFocusable(true);
         requestFocusInWindow();
         
-        //set pref size
+        // set pref size
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
-
-
-        //Load images
+        // Load images
         targetImage = new ImageIcon(getClass().getResource("./resources/targetIMG.png")).getImage();
         bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
         backgroundImage = new ImageIcon(getClass().getResource("./resources/backgroundIMG.jpg")).getImage();
-        bulletHolImage = new ImageIcon(getClass().getResource("./resources/bulletHole.png")).getImage();
-        
+
+        // Initialize the message timer
+        messageTimer = new Timer(3000, e -> {
+            hitMissMessage = ""; // Clear the message after 3 seconds
+            repaint();
+        });
+        messageTimer.setRepeats(false); // Timer should only run once
     }
 
     public void paintComponent(Graphics g)
@@ -68,80 +71,68 @@ public class real2dshooter extends JPanel implements KeyListener
 
     public void draw(Graphics g)
     {
-        g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); //background
+        g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); // background
         targetReCenter(); // recenters target
-        g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); //target
-        if (drawBulletHole) 
-        {
-            g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight,null);
-        }
-        // Display target distance
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Arial", Font.BOLD, 18));
-        g.drawString("Distance: " + targetDistance + " m", 10, 20);
-
-        // Display hit/miss message in the top-right corner
-        if (!hitMissMessage.isEmpty()) 
-        {
-            FontMetrics metrics = g.getFontMetrics(g.getFont());
-            int messageWidth = metrics.stringWidth(hitMissMessage);
-            g.drawString(hitMissMessage, WIDTH - messageWidth - 10, 20);
+        g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); // target
+        if (drawBulletHole) {
+            g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight, null);
         }
         
-    }
+        // Draw the current distance in meters in the top left corner
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        String distanceText = "Distance: " + targetDistance + " meters";
+        g.drawString(distanceText, 10, 20);
 
+        // Draw the hit/miss message in the top right corner if it's set
+        if (!hitMissMessage.isEmpty()) {
+            FontMetrics metrics = g.getFontMetrics();
+            int messageWidth = metrics.stringWidth(hitMissMessage);
+            g.setColor(Color.YELLOW);
+            g.drawString(hitMissMessage, WIDTH - messageWidth - 10, 20); // 10 pixels from the right edge
+        }
+    }
 
     public void targetReCenter()
     {
-        //recenters target after resizing for distance
-        targetX = (WIDTH/2)-(targetWidth/2);
-        targetY = (HEIGHT/2)-(targetHeight/2);
+        // recenters target after resizing for distance
+        targetX = (WIDTH / 2) - (targetWidth / 2);
+        targetY = (HEIGHT / 2) - (targetHeight / 2);
     }
 
-
-    
-    
     public void changeTargetDistance()
     {
-        // Example: Assume target size decreases by a factor proportional to distance
-        double scalingFactor = 100.0 / targetDistance; // Adjust scaling factor as needed
-    
-        targetWidth = (int)(100 * scalingFactor); // Adjust the base size (100) as needed
-        targetHeight = (int)(100 * scalingFactor);
-
-        // Ensure the target doesn't get too small
-      
-    
-        targetReCenter(); // Recenter the target after resizing
+        // Calculate the size of the target based on its distance
+        double scale = 100.0 / targetDistance; // Scaling factor, 100m is the baseline
+        targetWidth = (int) (initialTargetSize * scale);
+        targetHeight = (int) (initialTargetSize * scale);
+        targetReCenter(); // Re-center the target after resizing
     }
 
     @Override
-    public void keyTyped(KeyEvent e) 
-    {
-        
+    public void keyTyped(KeyEvent e) {
     }
 
     @Override
-    public void keyPressed(KeyEvent e) 
-    {
+    public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) // '+' key
         {
-            targetDistance += 100; // Increase distance
+            targetDistance += 100;
             changeTargetDistance(); // Update target size
             repaint(); // Redraw with new size
         }
         if (e.getKeyCode() == KeyEvent.VK_MINUS) // '-' key
         {
-            if (targetDistance > 100) { // Ensure distance doesn't go below 100 meters
-            targetDistance -= 100; // Decrease distance
+            targetDistance -= 100;
+            // Ensure target distance doesn't go negative
+            if (targetDistance < 100) targetDistance = 100; // Prevent distance from going below 100m
             changeTargetDistance(); // Update target size
             repaint(); // Redraw with new size
-        }
         }
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
-            //paint bullethole on target (dont worry about drop for now, just paint at center)
+            // Paint bullet hole on target (ignore drop for now, just paint at center)
             calculateBulletDrop();
             bulletHoleWidth = targetWidth / 10;
             bulletHoleHeight = targetHeight / 10;
@@ -151,89 +142,46 @@ public class real2dshooter extends JPanel implements KeyListener
             drawBulletHole = true;
             hitMissMessage();
             repaint();
-
         }
-
     }
 
     @Override
-    public void keyReleased(KeyEvent e) 
-    {
-
-        
+    public void keyReleased(KeyEvent e) {
     }
-
 
     public void calculateBulletDrop()
     {
-     //scrapped what I had. will write again later.  
+        // scrapped what I had. will write again later.  
     }
-
 
     public boolean isTargetHit()
     {
-       // Calculate the bounds of the target
-    int targetRight = targetX + targetWidth;
-    int targetBottom = targetY + targetHeight;
+        // Calculate the bounds of the target
+        int targetRight = targetX + targetWidth;
+        int targetBottom = targetY + targetHeight;
 
-    // Calculate the center of the bullet hole
-    int bulletHoleCenterX = bulletHoleX + bulletHoleWidth / 2;
-    int bulletHoleCenterY = bulletHoleY + bulletHoleHeight / 2;
+        // Calculate the center of the bullet hole
+        int bulletHoleCenterX = bulletHoleX + bulletHoleWidth / 2;
+        int bulletHoleCenterY = bulletHoleY + bulletHoleHeight / 2;
 
-    // Check if the bullet hole's center is within the target bounds
-    if (bulletHoleCenterX >= targetX && bulletHoleCenterX <= targetRight &&
-        bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom) 
-    {
-        return true;
-         // Bullet hole is within target bounds
-    } 
-    else 
-    {
-        return false; // Bullet hole is outside target bounds
-    }
-        
+        // Check if the bullet hole's center is within the target bounds
+        return bulletHoleCenterX >= targetX && bulletHoleCenterX <= targetRight &&
+               bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom;
     }
 
     public void hitMissMessage()
     {
-        isTargetHit();  //calling the isTargetHit method to determine whether or not the target is hit
-        if (isTargetHit() == true)  //if it is hit, a hit message is displayed to console
+        if (isTargetHit())
         {
-            System.out.println("Hit!");
-            //displayInfo()
+            hitMissMessage = "Hit!";
         }
-        else if (isTargetHit() == false)    //if missed, miss message is displayed to console
+        else
         {
-            System.out.println("Miss...");
-            //displayInfo()
+            hitMissMessage = "Miss...";
         }
+        
+        messageTimer.restart(); // Restart the timer to display the message for 3 seconds
         repaint();
-
-        // Display message for 3 seconds
-        if (messageTimer != null) 
-        {
-            messageTimer.stop();
-        }
-        messageTimer = new Timer(3000, new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) 
-            {
-                hitMissMessage = "";
-                repaint();
-            }
-        });
-        messageTimer.setRepeats(false); // Run once
-        messageTimer.start();
     }
 
-    public void displayInfo()
-    {
-        //show target distance
-        //show hit or miss
-    }
-
-    
-
-    
 }
