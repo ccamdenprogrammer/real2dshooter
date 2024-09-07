@@ -8,7 +8,7 @@ public class real2dshooter extends JPanel implements KeyListener
     Image backgroundImage;
     Image targetImage;
     Image bulletHolImage;
-    
+
     int WIDTH = 800; // board size init
     int HEIGHT = 800;
 
@@ -32,7 +32,7 @@ public class real2dshooter extends JPanel implements KeyListener
     int muzzleVelocity = 884; // m/s
     int weight_grains = 150;
     double gravity = 9.81;
-    double drop_cm = 0; // placeholder value
+    double drop_cm = 0; // bullet drop placeholder value
 
     // hit/miss message variables
     private String hitMissMessage = "";
@@ -42,11 +42,11 @@ public class real2dshooter extends JPanel implements KeyListener
     {
         // adding key listener
         this.addKeyListener(this);
-        
+
         // Make the panel focusable and request focus
         setFocusable(true);
         requestFocusInWindow();
-        
+
         // set pref size
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
@@ -56,7 +56,8 @@ public class real2dshooter extends JPanel implements KeyListener
         backgroundImage = new ImageIcon(getClass().getResource("./resources/backgroundIMG.jpg")).getImage();
 
         // Initialize the message timer
-        messageTimer = new Timer(3000, e -> {
+        messageTimer = new Timer(3000, e -> 
+        {
             hitMissMessage = ""; // Clear the message after 3 seconds
             repaint();
         });
@@ -74,10 +75,11 @@ public class real2dshooter extends JPanel implements KeyListener
         g.drawImage(backgroundImage, 0, 0, WIDTH, HEIGHT, null); // background
         targetReCenter(); // recenters target
         g.drawImage(targetImage, targetX, targetY, targetWidth, targetHeight, null); // target
-        if (drawBulletHole) {
+        if (drawBulletHole) 
+        {
             g.drawImage(bulletHolImage, bulletHoleX, bulletHoleY, bulletHoleWidth, bulletHoleHeight, null);
         }
-        
+
         // Draw the current distance in meters in the top left corner
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
@@ -132,13 +134,15 @@ public class real2dshooter extends JPanel implements KeyListener
 
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
-            // Paint bullet hole on target (ignore drop for now, just paint at center)
+            // Calculate bullet drop
             calculateBulletDrop();
+
+            // Paint bullet hole on target (apply bullet drop to the Y coordinate)
             bulletHoleWidth = targetWidth / 10;
             bulletHoleHeight = targetHeight / 10;
             bulletHoleX = targetX + (targetWidth / 2) - (bulletHoleWidth / 2);
-            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2);
-            
+            bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2) + (int)(drop_cm / (100.0 / targetDistance)); // Adjust for drop
+
             drawBulletHole = true;
             hitMissMessage();
             repaint();
@@ -151,7 +155,11 @@ public class real2dshooter extends JPanel implements KeyListener
 
     public void calculateBulletDrop()
     {
-        // scrapped what I had. will write again later.  
+        // Time for bullet to travel to the target (distance in meters, velocity in m/s)
+        double time = targetDistance / (double)muzzleVelocity;
+        
+        // Drop calculation using d = 1/2 * g * t^2
+        drop_cm = 0.5 * gravity * time * time * 100; // Drop in centimeters
     }
 
     public boolean isTargetHit()
@@ -160,13 +168,13 @@ public class real2dshooter extends JPanel implements KeyListener
         int targetRight = targetX + targetWidth;
         int targetBottom = targetY + targetHeight;
 
-        // Calculate the center of the bullet hole
-        int bulletHoleCenterX = bulletHoleX + bulletHoleWidth / 2;
-        int bulletHoleCenterY = bulletHoleY + bulletHoleHeight / 2;
+        // Calculate the bullet hole bounds
+        int bulletHoleRight = bulletHoleX + bulletHoleWidth;
+        int bulletHoleBottom = bulletHoleY + bulletHoleHeight;
 
-        // Check if the bullet hole's center is within the target bounds
-        return bulletHoleCenterX >= targetX && bulletHoleCenterX <= targetRight &&
-               bulletHoleCenterY >= targetY && bulletHoleCenterY <= targetBottom;
+        // Check if the bullet hole touches any part of the target
+        return bulletHoleRight >= targetX && bulletHoleX <= targetRight &&
+               bulletHoleBottom >= targetY && bulletHoleY <= targetBottom;
     }
 
     public void hitMissMessage()
@@ -179,7 +187,7 @@ public class real2dshooter extends JPanel implements KeyListener
         {
             hitMissMessage = "Miss...";
         }
-        
+
         messageTimer.restart(); // Restart the timer to display the message for 3 seconds
         repaint();
     }
