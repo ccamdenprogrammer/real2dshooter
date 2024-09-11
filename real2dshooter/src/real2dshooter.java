@@ -64,6 +64,7 @@ public class real2dshooter extends JPanel implements KeyListener
         messageTimer.setRepeats(false); // Timer should only run once
     }
 
+    @Override
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
