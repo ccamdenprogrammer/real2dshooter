@@ -35,14 +35,6 @@ public class real2dshooter extends JPanel implements KeyListener {
     private String hitMissMessage = "";
     private Timer messageTimer;
 
-    // Flight path box variables
-    private boolean showFlightPathBox = false;
-    private Timer flightPathTimer;
-    int boxWidth = 200;
-    int boxHeight = 100;
-    int boxX = WIDTH - boxWidth - 20; // Position at top-right corner
-    int boxY = 50;
-
     real2dshooter() {
         // Add key listener
         this.addKeyListener(this);
@@ -68,13 +60,6 @@ public class real2dshooter extends JPanel implements KeyListener {
             repaint();
         });
         messageTimer.setRepeats(false);
-
-        // Timer to hide flight path box after 5 seconds
-        flightPathTimer = new Timer(5000, e -> {
-            showFlightPathBox = false;
-            repaint();
-        });
-        flightPathTimer.setRepeats(false);
     }
 
     @Override
@@ -108,28 +93,6 @@ public class real2dshooter extends JPanel implements KeyListener {
             g.setColor(Color.YELLOW);
             g.drawString(hitMissMessage, WIDTH - messageWidth - 10, 20); // 10 pixels from the right edge
         }
-
-        // Draw the flight path box if enabled
-        if (showFlightPathBox) {
-            drawFlightPathBox(g);
-        }
-    }
-
-    public void drawFlightPathBox(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black box
-        g.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-        g.setColor(Color.RED);
-        g.drawRect(boxX, boxY, boxWidth, boxHeight); // Outline box
-
-        int lineStartX = boxX + 10;
-        int lineStartY = boxY + boxHeight / 2;
-        int lineEndX = boxX + boxWidth - 10;
-        int lineEndY = lineStartY + (int) (drop_cm / (100.0 / targetDistance)); // Adjust for drop
-
-        // Draw the trajectory line within the box
-        g.drawLine(lineStartX, lineStartY, lineEndX, lineEndY);
-        g.drawString("Bullet Path", lineStartX, boxY - 5);
     }
 
     public void targetReCenter() {
@@ -169,8 +132,6 @@ public class real2dshooter extends JPanel implements KeyListener {
             bulletHoleY = targetY + (targetHeight / 2) - (bulletHoleHeight / 2) + (int)(drop_cm / (100.0 / targetDistance));
             drawBulletHole = true;
             hitMissMessage();
-            showFlightPathBox = true; // Show flight path box
-            flightPathTimer.restart(); // Restart flight path timer
             repaint();
         }
 
