@@ -180,7 +180,7 @@ public class real2dshooter extends JPanel implements KeyListener
 
     public void hitMissMessage()
     {
-        if (isTargetHit())
+        if (isTargetHit() == true)
         {
             hitMissMessage = "Hit!";
         }
