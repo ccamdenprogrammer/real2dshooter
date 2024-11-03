@@ -136,13 +136,13 @@ public class real2dshooter extends JPanel implements KeyListener {
         }
 
         if (e.getKeyCode() == KeyEvent.VK_UP) { // Increase angle
-            elevationAngle += 1.0; // Increment angle by 1 degree
+            elevationAngle += 0.1; // Increment angle by 0.1 degree
             calculateBulletDrop(); // Recalculate drop with new angle
             repaint();
         }
 
         if (e.getKeyCode() == KeyEvent.VK_DOWN) { // Decrease angle
-            elevationAngle -= 1.0; // Decrement angle by 1 degree
+            elevationAngle -= 0.1; // Decrement angle by 0.1 degree
             if (elevationAngle < 0) elevationAngle = 0; // Prevent negative angles
             calculateBulletDrop(); // Recalculate drop with new angle
             repaint();
